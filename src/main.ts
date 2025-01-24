@@ -15,6 +15,7 @@ import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
 import {IncomingWebhook} from '@slack/webhook'
 import {MessageAttachment} from '@slack/types'
+import axios from 'axios'
 
 // HACK: https://github.com/octokit/types.ts/issues/205
 interface PullRequest {
@@ -185,29 +186,80 @@ async function main(): Promise<void> {
   // - Block are limited to 10 fields. >10 jobs in a workflow results in payload failure
 
   // Build our notification attachment
-  const slack_attachment = {
-    mrkdwn_in: ['text' as const],
-    color: workflow_color,
-    text: [status_string, details_string]
-      .concat(include_commit_message ? [commit_message] : [])
-      .join('\n'),
-    footer: repo_url,
-    footer_icon: 'https://github.githubassets.com/favicon.ico',
-    fields: job_fields
-  }
-  // Build our notification payload
-  const slack_payload_body = {
-    attachments: [slack_attachment],
-    ...(slack_name && {username: slack_name}),
-    ...(slack_channel && {channel: slack_channel}),
-    ...(slack_emoji && {icon_emoji: slack_emoji}),
-    ...(slack_icon && {icon_url: slack_icon})
+  // const slack_attachment = {
+  //   mrkdwn_in: ['text' as const],
+  //   color: workflow_color,
+  //   text: [status_string, details_string]
+  //     .concat(include_commit_message ? [commit_message] : [])
+  //     .join('\n'),
+  //   footer: repo_url,
+  //   footer_icon: 'https://github.githubassets.com/favicon.ico',
+  //   fields: job_fields
+  // }
+
+  const lark_payload = {
+    "config": {
+      "wide_screen_mode": true
+    },
+    "elements": [
+      {
+        "tag": "markdown",
+        "content": ""
+      }
+    ],
+    "header": {
+      "template": "green",
+      "title": {
+        "content": (slack_name && {username: slack_name}), // slack_name = core.getInput('name')
+        "tag": "plain_text"
+      }
+    }
   }
 
-  const slack_webhook = new IncomingWebhook(webhook_url)
+  for (let job in job_fields) {
+    lark_payload["elements"].push(
+      {
+        "tag": "markdown",
+        "content": job_fields[job].value
+      }
+    )
+  }
+
+  // Build our notification payload
+  // const slack_payload_body = {
+  //   attachments: [slack_attachment],
+  //   ...(slack_name && {username: slack_name}),
+  //   ...(slack_channel && {channel: slack_channel}),
+  //   ...(slack_emoji && {icon_emoji: slack_emoji}),
+  //   ...(slack_icon && {icon_url: slack_icon})
+  // }
+
+  // const slack_webhook = new IncomingWebhook(webhook_url)
 
   try {
-    await slack_webhook.send(slack_payload_body)
+    // await slack_webhook.send(slack_payload_body)
+    let data = JSON.stringify({
+      "msg_type": "interactive",
+      "card": lark_payload
+    });
+
+    let config = {
+      method: 'POST',
+      url: webhook_url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data : data
+    };
+
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.error(JSON.stringify(error.response.data, null, 4));
+    });
+
   } catch (err) {
     if (err instanceof Error) {
       core.setFailed(err.message)

@@ -255,9 +255,11 @@ async function main(): Promise<void> {
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
+      core.info(JSON.stringify(response.data));
     })
     .catch(function (error) {
       console.error(JSON.stringify(error.response.data, null, 4));
+      core.info(JSON.stringify(error.response.data, null, 4));
     });
 
   } catch (err) {

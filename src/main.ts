@@ -217,15 +217,15 @@ async function main(): Promise<void> {
         content: status_string + '\n' + details_string + '\n' + commit_message
       },
       {
-        tag: "column_set",
-        flex_mode: "none",
-        background_style: "grey",
+        tag: 'column_set',
+        flex_mode: 'none',
+        background_style: 'grey',
         columns: [
           {
-            tag: "column",
-            width: "weighted",
+            tag: 'column',
+            width: 'weighted',
             weight: 1,
-            vertical_align: "top",
+            vertical_align: 'top',
             elements: []
           }
         ]
@@ -255,7 +255,7 @@ async function main(): Promise<void> {
       foundPROD = true
     }
 
-    ghaction_job += job_fields[job].value + '\n'
+    ghaction_job += truncateString(job_fields[job].value, 72) + '\n'
   }
   lark_payload['elements'][1]['columns'][0]['elements'].push({
     tag: 'markdown',
@@ -359,5 +359,13 @@ function handleError(err: Error): void {
     core.setFailed(err.message)
   } else {
     core.setFailed(`Unhandled Error: ${err}`)
+  }
+}
+
+function truncateString(str: String, maxLength: number) {
+  if (str.length > maxLength) {
+    return str.slice(0, maxLength) + '...'
+  } else {
+    return str
   }
 }

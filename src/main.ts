@@ -13,7 +13,6 @@
 
 import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
-import {IncomingWebhook} from '@slack/webhook'
 import {MessageAttachment} from '@slack/types'
 import axios from 'axios'
 
@@ -44,8 +43,6 @@ interface PullRequest {
 
 type IncludeJobs = 'true' | 'false' | 'on-failure'
 type SlackMessageAttachementFields = MessageAttachment['fields']
-
-core.exportVariable('first', 'first');
 
 process.on('unhandledRejection', handleError)
 main().catch(handleError) // eslint-disable-line github/no-then
@@ -80,8 +77,6 @@ async function main(): Promise<void> {
     repo: context.repo.repo,
     run_id: context.runId
   })
-
-  core.exportVariable('test', 'Test output top');
 
   // Fetch workflow job information
   const {data: jobs_response} = await octokit.actions.listJobsForWorkflowRun({
@@ -256,13 +251,10 @@ async function main(): Promise<void> {
       data : data
     };
 
-    core.exportVariable('test', 'Test output');
-    core.exportVariable('config', JSON.stringify(config) || '');
-
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      core.exportVariable('response', JSON.stringify(response.data) || '');
+      core.setOutput('response', JSON.stringify(response.data) || '');
     })
     .catch(function (error) {
       console.error(JSON.stringify(error.response.data, null, 4));

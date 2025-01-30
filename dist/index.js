@@ -13113,7 +13113,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const axios_1 = __importDefault(__webpack_require__(1441));
-core.exportVariable('first', 'first');
 process.on('unhandledRejection', handleError);
 main().catch(handleError); // eslint-disable-line github/no-then
 // Action entrypoint
@@ -13146,7 +13145,6 @@ function main() {
             repo: github_1.context.repo.repo,
             run_id: github_1.context.runId
         });
-        core.exportVariable('test', 'Test output top');
         // Fetch workflow job information
         const { data: jobs_response } = yield octokit.actions.listJobsForWorkflowRun({
             owner: github_1.context.repo.owner,
@@ -13289,12 +13287,10 @@ function main() {
                 },
                 data: data
             };
-            core.exportVariable('test', 'Test output');
-            core.exportVariable('config', JSON.stringify(config) || '');
             axios_1.default(config)
                 .then(function (response) {
                 console.log(JSON.stringify(response.data));
-                core.exportVariable('response', JSON.stringify(response.data) || '');
+                core.setOutput('response', JSON.stringify(response.data) || '');
             })
                 .catch(function (error) {
                 console.error(JSON.stringify(error.response.data, null, 4));

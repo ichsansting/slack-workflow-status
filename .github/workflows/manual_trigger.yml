@@ -4,14 +4,15 @@ on:
 
 jobs:
   test-run:
-    runs:
-    using: 'node20'
+    name: Test Run
+    runs-on: ubuntu-latest
     steps:
       - run: echo "Just try a run"
 
   test-workflow:
     name: Test Workflow
     runs-on: ubuntu-latest
+    needs: [test-run]
 
     # actions.read permission is required.
     # other three are needed to interact with GitHub's OIDC Token endpoint.

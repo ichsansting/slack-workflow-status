@@ -13215,7 +13215,7 @@ function main() {
             return {
                 title: '',
                 short: true,
-                value: `${job_status_icon} [${truncateString(job.name, 80)}](${job.html_url}) (${job_duration})`
+                value: `${job_status_icon} [${truncateString(job.name, 72)}](${job.html_url}) (${job_duration})`
             };
         }));
         // Payload Formatting Shortcuts

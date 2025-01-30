@@ -17,7 +17,8 @@ jobs:
 
     steps:
       - name: Slack Workflow Notification
-        uses: Gamesight/slack-workflow-status@master
+        uses: ichsansting/slack-workflow-status@master
+        id: slack_workflow_notification
         with:
           # Required Input
           repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -26,3 +27,4 @@ jobs:
           name: 'Terraform FPR Prod'
           icon_emoji: ':airplane:'
           icon_url: 'https://avatars0.githubusercontent.com/u/139094570?s=96&v=4'
+      - run: echo ${{ steps.slack_workflow_notification.outputs.data }} 

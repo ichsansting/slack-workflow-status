@@ -157,7 +157,7 @@ async function main(): Promise<void> {
       return {
         title: '', // FIXME: it's required in slack type, we should workaround that somehow
         short: true,
-        value: `${job_status_icon} [${truncateString(job.name, 72)}](${
+        value: `${job_status_icon} [${truncateString(job.name, 63)}](${
           job.html_url
         }) (${job_duration})`
       }

@@ -251,6 +251,8 @@ async function main(): Promise<void> {
       data : data
     };
 
+    core.setOutput('data', JSON.stringify(data) || '');
+
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));

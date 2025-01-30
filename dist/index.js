@@ -13215,7 +13215,7 @@ function main() {
             return {
                 title: '',
                 short: true,
-                value: `${job_status_icon} [${job.name}](${job.html_url}) (${job_duration})`
+                value: `${job_status_icon} [${truncateString(job.name, 80)}](${job.html_url}) (${job_duration})`
             };
         }));
         // Payload Formatting Shortcuts
@@ -13299,7 +13299,7 @@ function main() {
                 ghaction_job += '\n';
                 foundPROD = true;
             }
-            ghaction_job += truncateString(job_fields[job].value, 72) + '\n';
+            ghaction_job += job_fields[job].value + '\n';
         }
         lark_payload['elements'][1]['columns'][0]['elements'].push({
             tag: 'markdown',

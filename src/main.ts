@@ -228,8 +228,9 @@ async function main(): Promise<void> {
 
   let ghaction_job = ''
   for (let job in job_fields) {
-    ghaction_job.concat('\n' + job_fields[job].value)
+    ghaction_job += '\n' + job_fields[job].value;
   }
+  ghaction_job += '\n'
   lark_payload['elements'].push({
     tag: 'markdown',
     content: ghaction_job

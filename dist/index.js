@@ -13262,6 +13262,20 @@ function main() {
                 {
                     tag: 'markdown',
                     content: status_string + '\n' + details_string + '\n' + commit_message
+                },
+                {
+                    tag: "column_set",
+                    flex_mode: "none",
+                    background_style: "grey",
+                    columns: [
+                        {
+                            tag: "column",
+                            width: "weighted",
+                            weight: 1,
+                            vertical_align: "top",
+                            elements: []
+                        }
+                    ]
                 }
             ],
             header: {
@@ -13287,7 +13301,7 @@ function main() {
             }
             ghaction_job += job_fields[job].value + '\n';
         }
-        lark_payload['elements'].push({
+        lark_payload['elements'][1]['columns'][0]['elements'].push({
             tag: 'markdown',
             content: ghaction_job
         });

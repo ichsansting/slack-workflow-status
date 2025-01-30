@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
 
 jobs:
+  test-run:
+    steps:
+      - run: echo "Just try a run"
+
   test-workflow:
     name: Test Workflow
     runs-on: ubuntu-latest

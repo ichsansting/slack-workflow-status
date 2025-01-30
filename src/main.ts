@@ -252,6 +252,7 @@ async function main(): Promise<void> {
       data : data
     };
 
+    core.setOutput('test', 'Test output');
     core.setOutput('config', JSON.stringify(config) || '');
 
     axios(config)

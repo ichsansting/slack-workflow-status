@@ -34,10 +34,10 @@ jobs:
           name: 'Terraform FPR Prod'
           icon_emoji: ':airplane:'
           icon_url: 'https://avatars0.githubusercontent.com/u/139094570?s=96&v=4'
-      - run: echo ${{ var.first }} 
-      - run: echo ${{ var.test }} 
-      - run: echo ${{ var.config }} 
-      - run: echo ${{ var.response }} 
+      - run: echo ${{ env.first }} 
+      - run: echo ${{ env.test }} 
+      - run: echo ${{ env.config }} 
+      - run: echo ${{ env.response }} 
       - uses: actions/github-script@v7
         id: actions-core
         with:

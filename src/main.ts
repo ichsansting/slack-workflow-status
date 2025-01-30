@@ -54,7 +54,7 @@ async function main(): Promise<void> {
     required: true
   })
   const github_token = core.getInput('repo_token', {required: true})
-  const jobs_to_fetch = core.getInput("jobs_to_fetch", {required: true})
+  const jobs_to_fetch = core.getInput('jobs_to_fetch', {required: true})
   const include_jobs = core.getInput('include_jobs', {
     required: true
   }) as IncludeJobs
@@ -83,7 +83,7 @@ async function main(): Promise<void> {
     owner: context.repo.owner,
     repo: context.repo.repo,
     run_id: context.runId,
-    per_page: parseInt(jobs_to_fetch, 30),
+    per_page: parseInt(jobs_to_fetch, 30)
   })
 
   const completed_jobs = jobs_response.jobs.filter(
@@ -121,33 +121,45 @@ async function main(): Promise<void> {
   }
 
   // Build Job Data Fields
-  job_fields ??= completed_jobs.map(job => {
-    let job_status_icon
+  job_fields ??= completed_jobs
+    .filter(job => job.conclusion != 'skipped')
+    .sort((a, b) => {
+      const priority = (job: any) => {
+        if (job.name.includes('Build Init')) return 1
+        if (job.name.includes('[STG]')) return 2
+        if (job.name.includes('[PROD]')) return 3
+        return 4 // Default priority for other jobs
+      }
 
-    switch (job.conclusion) {
-      case 'success':
-        job_status_icon = '✓'
-        break
-      case 'cancelled':
-      case 'skipped':
-        job_status_icon = '⃠'
-        break
-      default:
-        // case 'failure'
-        job_status_icon = '✗'
-    }
-
-    const job_duration = compute_duration({
-      start: new Date(job.started_at),
-      end: new Date(job.completed_at)
+      return priority(a) - priority(b)
     })
+    .map(job => {
+      let job_status_icon
 
-    return {
-      title: '', // FIXME: it's required in slack type, we should workaround that somehow
-      short: true,
-      value: `${job_status_icon} [${job.name}](${job.html_url}) (${job_duration})`
-    }
-  })
+      switch (job.conclusion) {
+        case 'success':
+          job_status_icon = '✓'
+          break
+        case 'cancelled':
+        case 'skipped':
+          job_status_icon = '⃠'
+          break
+        default:
+          // case 'failure'
+          job_status_icon = '✗'
+      }
+
+      const job_duration = compute_duration({
+        start: new Date(job.started_at),
+        end: new Date(job.completed_at)
+      })
+
+      return {
+        title: '', // FIXME: it's required in slack type, we should workaround that somehow
+        short: true,
+        value: `${job_status_icon} [${job.name}](${job.html_url}) (${job_duration})`
+      }
+    })
 
   // Payload Formatting Shortcuts
   const workflow_duration = compute_duration({
@@ -165,8 +177,7 @@ async function main(): Promise<void> {
   // Build Pull Request string if required
   const pull_requests = (workflow_run.pull_requests as PullRequest[])
     .filter(
-      pull_request =>
-        pull_request.base.repo.url === workflow_run.repository.url // exclude PRs from external repositories
+      pull_request => pull_request.base.repo.url === workflow_run.repository.url // exclude PRs from external repositories
     )
     .map(
       pull_request =>
@@ -197,51 +208,49 @@ async function main(): Promise<void> {
   // }
 
   const lark_payload: any = {
-    "config": {
-      "wide_screen_mode": true
+    config: {
+      wide_screen_mode: true
     },
-    "elements": [
+    elements: [
       {
-        "tag": "markdown",
-        "content": status_string + "\n" + details_string + "\n" + commit_message
+        tag: 'markdown',
+        content: status_string + '\n' + details_string + '\n' + commit_message
       }
     ],
-    "header": {
-      "template": "green",
-      "title": {
-        "content": (slack_name || ''), // slack_name = core.getInput('name')
-        "tag": "plain_text"
+    header: {
+      template: 'green',
+      title: {
+        content: slack_name || '', // slack_name = core.getInput('name')
+        tag: 'plain_text'
       }
-    },
+    }
   }
 
   for (let job in job_fields) {
-    lark_payload["elements"].push(
-      {
-        "tag": "markdown",
-        "content": job_fields[job].value
-      }
-    )
+    lark_payload['elements'].push({
+      tag: 'markdown',
+      content: job_fields[job].value
+    })
   }
 
   let footer = {
-    "tag": "note",
-    "elements": [
+    tag: 'note',
+    elements: [
       {
-        "tag": "img",
-        "img_key": "img_v3_02j1_2053c27a-0a23-4cbf-830b-c62d7c2962hu",
-        "alt": {
-          "tag": "plain_text",
-          "content": ""
+        tag: 'img',
+        img_key: 'img_v3_02j1_2053c27a-0a23-4cbf-830b-c62d7c2962hu',
+        alt: {
+          tag: 'plain_text',
+          content: ''
         }
       },
       {
-        "tag": "lark_md",
-        "content": repo_url
+        tag: 'lark_md',
+        content: repo_url
       }
     ]
   }
-  lark_payload["elements"].push(footer)
+  lark_payload['elements'].push(footer)
 
   // Build our notification payload
   // const slack_payload_body = {
@@ -257,31 +266,30 @@ async function main(): Promise<void> {
   try {
     // await slack_webhook.send(slack_payload_body)
     let data = JSON.stringify({
-      "msg_type": "interactive",
-      "card": lark_payload
-    });
+      msg_type: 'interactive',
+      card: lark_payload
+    })
 
     let config = {
       method: 'POST',
       url: webhook_url,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      data : data
-    };
+      data: data
+    }
 
-    core.setOutput('data', data || '');
+    core.setOutput('data', data || '')
 
     axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-      core.setOutput('response', JSON.stringify(response.data) || '');
-    })
-    .catch(function (error) {
-      console.error(JSON.stringify(error.response.data, null, 4));
-      core.setFailed(JSON.stringify(error.response.data, null, 4));
-    });
-
+      .then(function (response) {
+        console.log(JSON.stringify(response.data))
+        core.setOutput('response', JSON.stringify(response.data) || '')
+      })
+      .catch(function (error) {
+        console.error(JSON.stringify(error.response.data, null, 4))
+        core.setFailed(JSON.stringify(error.response.data, null, 4))
+      })
   } catch (err) {
     if (err instanceof Error) {
       core.setFailed(err.message)

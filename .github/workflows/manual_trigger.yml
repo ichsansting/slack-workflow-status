@@ -32,7 +32,5 @@ jobs:
           slack_webhook_url: ${{ secrets.LARK_WEBHOOK_URL }}
           # Optional Input
           name: 'Terraform FPR Prod'
-          icon_emoji: ':airplane:'
-          icon_url: 'https://avatars0.githubusercontent.com/u/139094570?s=96&v=4'
-      - run: echo ${{ steps.slack_workflow_notification.outputs.data }} 
-      - run: echo ${{ steps.slack_workflow_notification.outputs.response }} 
+      - run: echo ${{ steps.slack_workflow_notification.outputs.data }}
+      - run: echo ${{ steps.slack_workflow_notification.outputs.response }}

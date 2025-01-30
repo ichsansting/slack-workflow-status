@@ -13201,7 +13201,7 @@ function main() {
             return {
                 title: '',
                 short: true,
-                value: `${job_status_icon} <${job.html_url}|${job.name}> (${job_duration})`
+                value: `${job_status_icon} [${job.name}](${job.html_url}) (${job_duration})`
             };
         }));
         // Payload Formatting Shortcuts
@@ -13253,7 +13253,7 @@ function main() {
             "header": {
                 "template": "green",
                 "title": {
-                    "content": (slack_name && { username: slack_name }),
+                    "content": (slack_name || ''),
                     "tag": "plain_text"
                 }
             }

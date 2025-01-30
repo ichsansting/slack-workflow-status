@@ -145,7 +145,7 @@ async function main(): Promise<void> {
     return {
       title: '', // FIXME: it's required in slack type, we should workaround that somehow
       short: true,
-      value: `${job_status_icon} <${job.html_url}|${job.name}> (${job_duration})`
+      value: `${job_status_icon} [${job.name}](${job.html_url}) (${job_duration})`
     }
   })
 
@@ -209,7 +209,7 @@ async function main(): Promise<void> {
     "header": {
       "template": "green",
       "title": {
-        "content": (slack_name && {username: slack_name}), // slack_name = core.getInput('name')
+        "content": (slack_name || ''), // slack_name = core.getInput('name')
         "tag": "plain_text"
       }
     }

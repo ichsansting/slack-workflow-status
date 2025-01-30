@@ -41,5 +41,5 @@ jobs:
         id: actions-core
         with:
           script: |
-            core.setOutput('result', 'core')
-      - run: echo "${{ steps.actions-core.outputs.result }}"
+            core.setOutput('c', 'core')
+      - run: echo "${{ steps.actions-core.outputs.c }}"

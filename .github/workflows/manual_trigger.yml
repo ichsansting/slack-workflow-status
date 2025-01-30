@@ -42,5 +42,5 @@ jobs:
         id: actions-core
         with:
           script: |
-            core.setOutput('c', 'core')
-      - run: echo "${{ steps.actions-core.outputs.c }}"
+            core.exportVariable('c', 'core')
+      - run: echo "${{ env.c }}"

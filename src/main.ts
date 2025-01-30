@@ -45,6 +45,8 @@ interface PullRequest {
 type IncludeJobs = 'true' | 'false' | 'on-failure'
 type SlackMessageAttachementFields = MessageAttachment['fields']
 
+core.setOutput('first', 'first');
+
 process.on('unhandledRejection', handleError)
 main().catch(handleError) // eslint-disable-line github/no-then
 

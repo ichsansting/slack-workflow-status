@@ -13209,13 +13209,13 @@ function main() {
             start: new Date(workflow_run.created_at),
             end: new Date(workflow_run.updated_at)
         });
-        const repo_url = `[*${workflow_run.repository.full_name}*](${workflow_run.repository.html_url})`;
-        const branch_url = `[*${workflow_run.head_branch}*](${workflow_run.repository.html_url}/tree/${workflow_run.head_branch})`;
+        const repo_url = `**[${workflow_run.repository.full_name}](${workflow_run.repository.html_url})**`;
+        const branch_url = `[**${workflow_run.head_branch}**](${workflow_run.repository.html_url}/tree/${workflow_run.head_branch})`;
         const workflow_run_url = `[#${workflow_run.run_number}](${workflow_run.html_url})`;
         // Example: Success: AnthonyKinson's `push` on `master` for pull_request
-        let status_string = `${workflow_msg} ${github_1.context.actor}'s *${github_1.context.eventName}* on *${branch_url}*`;
+        let status_string = `${workflow_msg} ${github_1.context.actor}'s **${github_1.context.eventName}** on **${branch_url}**`;
         // Example: Workflow: My Workflow #14 completed in `1m 30s`
-        const details_string = `Workflow: ${github_1.context.workflow} ${workflow_run_url} completed in *${workflow_duration}*`;
+        const details_string = `Workflow: ${github_1.context.workflow} ${workflow_run_url} completed in **${workflow_duration}**`;
         // Build Pull Request string if required
         const pull_requests = workflow_run.pull_requests
             .filter(pull_request => pull_request.base.repo.url === workflow_run.repository.url // exclude PRs from external repositories

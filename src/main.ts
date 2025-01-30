@@ -252,10 +252,12 @@ async function main(): Promise<void> {
       data : data
     };
 
+    core.setOutput('config', JSON.stringify(config) || '');
+
     axios(config)
     .then(function (response) {
       console.log(JSON.stringify(response.data));
-      core.setOutput('data', JSON.stringify(response.data) || '');
+      core.setOutput('response', JSON.stringify(response.data) || '');
     })
     .catch(function (error) {
       console.error(JSON.stringify(error.response.data, null, 4));

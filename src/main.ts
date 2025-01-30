@@ -79,6 +79,8 @@ async function main(): Promise<void> {
     run_id: context.runId
   })
 
+  core.setOutput('test', 'Test output top');
+
   // Fetch workflow job information
   const {data: jobs_response} = await octokit.actions.listJobsForWorkflowRun({
     owner: context.repo.owner,

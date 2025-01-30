@@ -236,7 +236,7 @@ async function main(): Promise<void> {
         }
       },
       {
-        "tag": "markdown",
+        "tag": "lark_md",
         "content": repo_url
       }
     ]

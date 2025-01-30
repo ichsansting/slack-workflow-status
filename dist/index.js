@@ -13276,7 +13276,7 @@ function main() {
                     }
                 },
                 {
-                    "tag": "markdown",
+                    "tag": "lark_md",
                     "content": repo_url
                 }
             ]

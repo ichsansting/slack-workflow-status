@@ -237,7 +237,7 @@ async function main(): Promise<void> {
     "elements": [
       {
         "tag": "img",
-        "img_key": "https://github.githubassets.com/favicon.ico",
+        "img_key": "img_v3_02j1_2053c27a-0a23-4cbf-830b-c62d7c2962hu",
         "alt": {
           "tag": "plain_text",
           "content": ""

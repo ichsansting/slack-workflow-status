@@ -4,7 +4,27 @@ on:
 
 jobs:
   test-run:
-    name: Test Run
+    name: cd / Build Init
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Just try a run"
+  test-run:
+    name: cd / [STG] Terraform Apply (ap-southeast-1/fpr-affiliate/fprdsaf/api-gateway/vpc-link/) 
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Just try a run"
+  test-run:
+    name: cd / [PROD] Terraform Apply 
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Just try a run"
+  test-run:
+    name: cd / [STG] Terraform Apply (staging/ap-southeast-1/fpr-affiliate/fpraff/api-gateway/rest_api/)
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Just try a run"
+  test-run:
+    name: cd / [PROD] Terraform Apply (ap-southeast-1/fpr-affiliate/fprdsaf/api-gateway/vpc-link/)
     runs-on: ubuntu-latest
     steps:
       - run: echo "Just try a run"

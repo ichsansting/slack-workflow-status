@@ -227,10 +227,22 @@ async function main(): Promise<void> {
   }
 
   let ghaction_job = ''
+  // for separation (new line)
+  let foundSTG = false
+  let foundPROD = false
   for (let job in job_fields) {
-    ghaction_job += '\n' + job_fields[job].value;
+    if (job_fields[job].value.includes('[STG]') && !foundSTG) {
+      ghaction_job += '\n'
+      foundSTG = true
+    }
+
+    if (job_fields[job].value.includes('[PROD]') && !foundPROD) {
+      ghaction_job += '\n'
+      foundPROD = true
+    }
+
+    ghaction_job += job_fields[job].value + '\n'
   }
-  ghaction_job += '\n'
   lark_payload['elements'].push({
     tag: 'markdown',
     content: ghaction_job

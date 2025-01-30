@@ -9,12 +9,12 @@ jobs:
     steps:
       - run: echo "Just try a run"
   test-run2:
-    name: cd / [STG] Terraform Apply (ap-southeast-1/fpr-affiliate/fprdsaf/api-gateway/vpc-link/) 
+    name: cd / [STG] Terraform Apply (ap-southeast-1/fpr-affiliate/fprdsaf/api-gateway/vpc-link/)
     runs-on: ubuntu-latest
     steps:
       - run: echo "Just try a run"
   test-run3:
-    name: cd / [PROD] Terraform Apply 
+    name: cd / [PROD] Terraform Apply
     runs-on: ubuntu-latest
     steps:
       - run: echo "Just try a run"
@@ -32,7 +32,7 @@ jobs:
   test-workflow:
     name: Test Workflow
     runs-on: ubuntu-latest
-    needs: [test-run1,test-run2,test-run3,test-run4,test-run5]
+    needs: [test-run1, test-run2, test-run3, test-run4, test-run5]
 
     # actions.read permission is required.
     # other three are needed to interact with GitHub's OIDC Token endpoint.

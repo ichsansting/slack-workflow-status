@@ -13184,11 +13184,11 @@ function main() {
             .filter(job => job.conclusion != 'skipped')
             .sort((a, b) => {
             const priority = (job) => {
-                if (job.name.includes("Build Init"))
+                if (job.name.includes('Build Init'))
                     return 1;
-                if (job.name.includes("[STG]"))
+                if (job.name.includes('[STG]'))
                     return 2;
-                if (job.name.includes("[PROD]"))
+                if (job.name.includes('[PROD]'))
                     return 3;
                 return 4; // Default priority for other jobs
             };
@@ -13272,12 +13272,14 @@ function main() {
                 }
             }
         };
+        let ghaction_job = '';
         for (let job in job_fields) {
-            lark_payload['elements'].push({
-                tag: 'markdown',
-                content: job_fields[job].value
-            });
+            ghaction_job.concat('\n' + job_fields[job].value);
         }
+        lark_payload['elements'].push({
+            tag: 'markdown',
+            content: ghaction_job
+        });
         let footer = {
             tag: 'note',
             elements: [

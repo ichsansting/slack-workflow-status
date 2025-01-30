@@ -1,0 +1,28 @@
+name: Manually Triggered Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  test-workflow:
+    name: Test Workflow
+    runs-on: ubuntu-latest
+
+    # actions.read permission is required.
+    # other three are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      actions: 'read'
+      pull-requests: write
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Slack Workflow Notification
+        uses: Gamesight/slack-workflow-status@master
+        with:
+          # Required Input
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          slack_webhook_url: ${{ env.LARK_WEBHOOK_URL }}
+          # Optional Input
+          name: 'Terraform FPR Prod'
+          icon_emoji: ':airplane:'
+          icon_url: 'https://avatars0.githubusercontent.com/u/139094570?s=96&v=4'

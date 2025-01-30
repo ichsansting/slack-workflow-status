@@ -37,9 +37,9 @@ jobs:
       - run: echo ${{ steps.slack_workflow_notification.outputs.test }} 
       - run: echo ${{ steps.slack_workflow_notification.outputs.config }} 
       - run: echo ${{ steps.slack_workflow_notification.outputs.response }} 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         id: actions-core
         with:
           script: |
             core.setOutput('result', 'core')
-      - run: echo ${{ steps.actions-core.outputs.result }} 
+      - run: echo "${{ steps.actions-core.outputs.result }}"

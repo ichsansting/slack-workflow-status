@@ -4,6 +4,8 @@ on:
 
 jobs:
   test-run:
+    runs:
+    using: 'node20'
     steps:
       - run: echo "Just try a run"
 

@@ -13349,6 +13349,7 @@ function main() {
                 },
                 data: data
             };
+            console.log(JSON.stringify(data));
             core.setOutput('data', data || '');
             axios_1.default(config)
                 .then(function (response) {

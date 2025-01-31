@@ -313,6 +313,7 @@ async function main(): Promise<void> {
       data: data
     }
 
+    console.log(JSON.stringify(data))
     core.setOutput('data', data || '')
 
     axios(config)

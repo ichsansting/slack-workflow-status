@@ -188,10 +188,13 @@ async function main(): Promise<void> {
     .join(', ')
 
   if (pull_requests !== '') {
-    status_string = `${workflow_msg} ${context.actor}'s \`pull_request\` ${pull_requests}`
+    status_string = `${workflow_msg} <text_tag color='blue'>${context.actor}'s</text_tag> \`pull_request\` ${pull_requests}`
   }
 
-  const commit_message = `Commit: ${workflow_run.head_commit.message}`
+  let commit_message = `Commit: ${workflow_run.head_commit.message}`
+  if (workflow_run.head_commit.author.email.includes('traveloka.com')) {
+    commit_message = `Commit: ${workflow_run.head_commit.message} <text_tag color='neutral'>by</text_tag> <at email=${workflow_run.head_commit.author.email}></at>`
+  }
 
   // We're using old style attachments rather than the new blocks because:
   // - Blocks don't allow colour indicators on messages

@@ -172,7 +172,7 @@ async function main(): Promise<void> {
   const branch_url = `[**${workflow_run.head_branch}**](${workflow_run.repository.html_url}/tree/${workflow_run.head_branch})`
   const workflow_run_url = `[#${workflow_run.run_number}](${workflow_run.html_url})`
   // Example: Success: AnthonyKinson's `push` on `master` for pull_request
-  let status_string = `${workflow_msg} ${context.actor}'s **${context.eventName}** on **${branch_url}**`
+  let status_string = `${workflow_msg} <text_tag color='blue'>${context.actor}'s</text_tag> **${context.eventName}** on **${branch_url}**`
   // Example: Workflow: My Workflow #14 completed in `1m 30s`
   const details_string = `Workflow: ${context.workflow} ${workflow_run_url} completed in **${workflow_duration}**`
 
@@ -191,9 +191,12 @@ async function main(): Promise<void> {
     status_string = `${workflow_msg} <text_tag color='blue'>${context.actor}'s</text_tag> \`pull_request\` ${pull_requests}`
   }
 
-  let commit_message = `Commit: ${workflow_run.head_commit.message}`
+  let commit_message = ''
+  console.log('Commit Author: ' + workflow_run.head_commit.author.email)
   if (workflow_run.head_commit.author.email.includes('traveloka.com')) {
     commit_message = `Commit: ${workflow_run.head_commit.message} <text_tag color='neutral'>by</text_tag> <at email=${workflow_run.head_commit.author.email}></at>`
+  } else {
+    commit_message = `Commit: ${workflow_run.head_commit.message}`
   }
 
   // We're using old style attachments rather than the new blocks because:
